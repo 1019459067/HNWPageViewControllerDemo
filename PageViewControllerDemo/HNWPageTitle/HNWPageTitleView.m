@@ -6,7 +6,6 @@
 
 #import "HNWPageTitleView.h"
 #import "HNWPageTitleCell.h"
-#import "HNWPageTitleUtil.h"
 
 #pragma mark -
 #pragma mark CellModel类

@@ -6,7 +6,6 @@
 
 #import <UIKit/UIKit.h>
 #import "HNWPageTitleCell.h"
-#import "HNWPageTitleUtil.h"
 
 #pragma mark -
 #pragma mark Cell类

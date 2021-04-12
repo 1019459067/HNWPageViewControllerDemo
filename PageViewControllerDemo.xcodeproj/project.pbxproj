@@ -23,7 +23,6 @@
 		A6D26D93260996F400D85223 /* TestAViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A6D26D91260996F400D85223 /* TestAViewController.xib */; };
 		A6D26D982609970500D85223 /* TestBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6D26D962609970500D85223 /* TestBViewController.m */; };
 		A6D26D992609970500D85223 /* TestBViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A6D26D972609970500D85223 /* TestBViewController.xib */; };
-		A6D26DA926099EB800D85223 /* HNWPageTitleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = A6D26DA826099EB800D85223 /* HNWPageTitleUtil.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,8 +55,6 @@
 		A6D26D952609970500D85223 /* TestBViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestBViewController.h; sourceTree = "<group>"; };
 		A6D26D962609970500D85223 /* TestBViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestBViewController.m; sourceTree = "<group>"; };
 		A6D26D972609970500D85223 /* TestBViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestBViewController.xib; sourceTree = "<group>"; };
-		A6D26DA726099EB800D85223 /* HNWPageTitleUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HNWPageTitleUtil.h; sourceTree = "<group>"; };
-		A6D26DA826099EB800D85223 /* HNWPageTitleUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HNWPageTitleUtil.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,8 +139,6 @@
 				A6D26D68260884E300D85223 /* HNWPageViewTitleConfig.m */,
 				A6D26D6A260884E300D85223 /* HNWPageTitleCell.h */,
 				A6D26D6E260884E300D85223 /* HNWPageTitleCell.m */,
-				A6D26DA726099EB800D85223 /* HNWPageTitleUtil.h */,
-				A6D26DA826099EB800D85223 /* HNWPageTitleUtil.m */,
 			);
 			path = HNWPageTitle;
 			sourceTree = "<group>";
@@ -224,7 +219,6 @@
 				A6D26D53260884B700D85223 /* ViewController.m in Sources */,
 				A6039594261C2E9800A50030 /* HNWDevice.m in Sources */,
 				A6D26D4D260884B700D85223 /* AppDelegate.m in Sources */,
-				A6D26DA926099EB800D85223 /* HNWPageTitleUtil.m in Sources */,
 				A6D26D92260996F400D85223 /* TestAViewController.m in Sources */,
 				A6D26D982609970500D85223 /* TestBViewController.m in Sources */,
 				A6D26D71260884E300D85223 /* HNWPageViewController.m in Sources */,
