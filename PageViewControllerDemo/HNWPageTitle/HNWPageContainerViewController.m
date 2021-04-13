@@ -11,23 +11,9 @@
 
 @property (strong, nonatomic) UIScrollView *horizScrollView;
 
-@property (strong, nonatomic) NSMutableArray *listVCArray;
-
-@property (weak, nonatomic) id <HNWPageContainerViewControllerDelegate> delegate;
-
 @end
 
 @implementation HNWPageContainerViewController
-
-- (instancetype)initWithFrame:(CGRect)frame
-                      listVCs:(NSMutableArray *)listVCArray
-                     delegate:(id<HNWPageContainerViewControllerDelegate>)delegate {
-    if (self = [super init]) {
-        self.listVCArray = listVCArray;
-        self.delegate = delegate;
-    }
-    return self;
-}
 
 #pragma mark - life
 - (void)viewDidLoad {
@@ -44,16 +30,6 @@
     self.horizScrollView.scrollEnabled = YES;
     self.horizScrollView.delegate = self;
     [self.view addSubview:self.horizScrollView];
-
-    
-    for (int i = 0; i< self.listVCArray.count; i++) {
-        UIViewController *vc = self.listVCArray[i];
-        
-        [self addChildViewController:vc];
-        [self.horizScrollView addSubview:vc.view];
-        vc.view.frame = CGRectMake(i*self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
-    }
-    [self.horizScrollView setContentSize:CGSizeMake(self.listVCArray.count*self.view.frame.size.width, 0)];
 }
 
 #pragma mark - other
@@ -69,4 +45,17 @@
     }
 }
 
+#pragma mark - set data
+- (void)setListVCArray:(NSMutableArray *)listVCArray {
+    _listVCArray = listVCArray;
+    
+    for (int i = 0; i< self.listVCArray.count; i++) {
+        UIViewController *vc = self.listVCArray[i];
+        
+        [self addChildViewController:vc];
+        [self.horizScrollView addSubview:vc.view];
+        vc.view.frame = CGRectMake(i*self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
+    }
+    [self.horizScrollView setContentSize:CGSizeMake(self.listVCArray.count*self.view.frame.size.width, 0)];
+}
 @end

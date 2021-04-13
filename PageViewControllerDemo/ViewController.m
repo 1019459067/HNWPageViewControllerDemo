@@ -101,16 +101,17 @@ static NSString *const kObseverKeyContentOffset = @"contentOffset";
     self.titleView.frame = CGRectMake(0, 0, SCREEN_WIDTH, config.titleViewHeight);
     
     CGFloat height = self.bottomContentViewConstraintH.constant = SCREEN_HEIGHT - HNWDevice.safeAreaTopInsetWhenNavigationBarShow-config.titleViewHeight;
-    self.pageContainerVC = [[HNWPageContainerViewController alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, height)
-                                                                        listVCs:self.listViewControllerArray
-                                                                       delegate:self];
+    self.pageContainerVC = [[HNWPageContainerViewController alloc]init];
+    self.pageContainerVC.delegate = self;
+    self.pageContainerVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, height);
     [self addChildViewController:self.pageContainerVC];
     [self.bottomContentView addSubview:self.pageContainerVC.view];
     
+    self.pageContainerVC.listVCArray = self.listViewControllerArray;
     [self chooseNestedWithIndex:0];
     
-    self.titleView.selectedIndex = 2;
-    [self.pageContainerVC setContentWithIndex:2 animated:YES];
+//    self.titleView.selectedIndex = 2;
+//    [self.pageContainerVC setContentWithIndex:2 animated:YES];
 }
 
 - (UILabel *)setupHeaderView {

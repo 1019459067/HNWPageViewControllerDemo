@@ -18,9 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HNWPageContainerViewController : UIViewController
 
-- (instancetype)initWithFrame:(CGRect)frame
-                      listVCs:(NSMutableArray *)listVCArray
-                     delegate:(id<HNWPageContainerViewControllerDelegate>)delegate;
+@property (strong, nonatomic) NSMutableArray *listVCArray;
+
+@property (weak, nonatomic) id <HNWPageContainerViewControllerDelegate> delegate;
 
 - (void)setContentWithIndex:(NSInteger)index animated:(BOOL)animated;
 
