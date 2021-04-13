@@ -8,6 +8,7 @@
 #import "ViewController.h"
 
 #import "HNWPageTitleView.h"
+#import "HNWPageContainerViewController.h"
 
 #import "CommonTableViewController.h"
 #import "TestAViewController.h"
@@ -21,7 +22,7 @@
 
 static NSString *const kObseverKeyContentOffset = @"contentOffset";
 
-@interface ViewController ()<HNWPageTitleViewDelegate, HNWPageTitleViewDataSource, UIScrollViewDelegate>
+@interface ViewController ()<HNWPageTitleViewDelegate, HNWPageTitleViewDataSource, UIScrollViewDelegate, HNWPageContainerViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIScrollView *mainScrollView;
 @property (weak, nonatomic) IBOutlet UIView *topContentView;
@@ -32,13 +33,12 @@ static NSString *const kObseverKeyContentOffset = @"contentOffset";
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomContentViewConstraintH;
 
 @property (nonatomic, strong) HNWPageTitleView *titleView;
-
+@property (strong, nonatomic) HNWPageContainerViewController *pageContainerVC;
 //标题
 @property (nonatomic, copy) NSArray *titlesArray;
 
 @property (nonatomic,weak)id<NestedDelegate> currentNestedDelegate;
 @property (strong, nonatomic) NSMutableArray *listViewControllerArray;
-@property (strong, nonatomic) UIScrollView *horizScrollView;
 
 @end
 
@@ -97,30 +97,18 @@ static NSString *const kObseverKeyContentOffset = @"contentOffset";
     config.titleNormalFont = [UIFont systemFontOfSize:14];
     
     self.titleView = [[HNWPageTitleView alloc] initWithConfig:config];
-    self.titleView.backgroundColor = UIColor.yellowColor;
     self.titleView.dataSource = self;
     self.titleView.delegate = self;
     [self.titleSegmentView addSubview:self.titleView];
     self.titleView.frame = CGRectMake(0, 0, SCREEN_WIDTH, config.titleViewHeight);
     
     CGFloat height = self.bottomContentViewConstraintH.constant = SCREEN_HEIGHT - HNWDevice.safeAreaTopInsetWhenNavigationBarShow-config.titleViewHeight;
-    self.horizScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, height)];
-    self.horizScrollView.showsVerticalScrollIndicator = NO;
-    self.horizScrollView.showsHorizontalScrollIndicator = NO;
-    self.horizScrollView.pagingEnabled = YES;
-    self.horizScrollView.bounces = NO;
-    self.horizScrollView.scrollEnabled = YES;
-    self.horizScrollView.delegate = self;
-    [self.horizScrollView setContentSize:CGSizeMake(self.titlesArray.count*SCREEN_WIDTH, 0)];
-    [self.bottomContentView addSubview:self.horizScrollView];
-    
-    for (int i = 0; i< self.listViewControllerArray.count; i++) {
-        UIViewController *vc = self.listViewControllerArray[i];
-        
-        [self addChildViewController:vc];
-        [self.horizScrollView addSubview:vc.view];
-        [vc.view setFrame:CGRectMake(i*SCREEN_WIDTH, 0, SCREEN_WIDTH, height)];
-    }
+    self.pageContainerVC = [[HNWPageContainerViewController alloc]init];
+    self.pageContainerVC.delegate = self;
+    self.pageContainerVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, height);
+    [self addChildViewController:self.pageContainerVC];
+    [self.bottomContentView addSubview:self.pageContainerVC.view];
+    self.pageContainerVC.listVCArray = self.listViewControllerArray;
     
     [self chooseNested:self.listViewControllerArray[0]];
 }
@@ -138,7 +126,7 @@ static NSString *const kObseverKeyContentOffset = @"contentOffset";
 #pragma mark - other
 - (void)updateUISelectedWithIndex:(NSInteger)selected {
     [self chooseNested:[self.listViewControllerArray objectAtIndex:selected]];
-    [self.horizScrollView setContentOffset:CGPointMake(selected * SCREEN_WIDTH, 0) animated:YES];
+    [self.pageContainerVC updateUISelectedWithIndex:selected];
 }
 
 - (void)chooseNested:(id<NestedDelegate>)delegate{
@@ -147,7 +135,7 @@ static NSString *const kObseverKeyContentOffset = @"contentOffset";
     }
     
     self.currentNestedDelegate = delegate;
-    [self.currentNestedDelegate.getNestedScrollView  addObserver:self forKeyPath:kObseverKeyContentOffset options:NSKeyValueObservingOptionNew context:nil];
+    [self.currentNestedDelegate.getNestedScrollView addObserver:self forKeyPath:kObseverKeyContentOffset options:NSKeyValueObservingOptionNew context:nil];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
@@ -277,11 +265,11 @@ static NSString *const kObseverKeyContentOffset = @"contentOffset";
     }
 }
 
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-    if (scrollView == self.horizScrollView) {
-        NSInteger page = targetContentOffset->x/SCREEN_WIDTH;
-        self.titleView.selectedIndex = page;
-    }
+#pragma mark - HNWPageContainerViewControllerDelegate
+- (void)pageContainerViewController:(HNWPageContainerViewController *)vc didScrolleddAtIndex:(NSInteger)index
+{
+    self.titleView.selectedIndex = index;
+    [self chooseNested:self.listViewControllerArray[index]];
 }
 
 @end
