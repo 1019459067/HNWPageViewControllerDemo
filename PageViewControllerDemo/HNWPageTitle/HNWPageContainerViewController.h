@@ -12,16 +12,17 @@ NS_ASSUME_NONNULL_BEGIN
 @class HNWPageContainerViewController;
 @protocol HNWPageContainerViewControllerDelegate <NSObject>
 
-- (void)pageContainerViewController:(HNWPageContainerViewController *)vc didScrolleddAtIndex:(NSInteger)index;
+- (void)pageContainerViewController:(HNWPageContainerViewController *)vc didScrolledAtIndex:(NSInteger)index;
 
 @end
 
 @interface HNWPageContainerViewController : UIViewController
 
-@property (strong, nonatomic) NSMutableArray *listVCArray;
-@property (nonatomic, weak) id <HNWPageContainerViewControllerDelegate> delegate;
+- (instancetype)initWithFrame:(CGRect)frame
+                      listVCs:(NSMutableArray *)listVCArray
+                     delegate:(id<HNWPageContainerViewControllerDelegate>)delegate;
 
-- (void)updateUISelectedWithIndex:(NSInteger)selected;
+- (void)setContentWithIndex:(NSInteger)index animated:(BOOL)animated;
 
 @end
 

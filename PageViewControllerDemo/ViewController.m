@@ -44,6 +44,7 @@ static NSString *const kObseverKeyContentOffset = @"contentOffset";
 
 @implementation ViewController
 
+#pragma mark - life
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -52,31 +53,28 @@ static NSString *const kObseverKeyContentOffset = @"contentOffset";
     
     if (@available(iOS 11.0, *)) {
         self.mainScrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    }else {
+    } else {
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     self.view.backgroundColor = [UIColor whiteColor];
 
-    self.titlesArray = @[@"热点",@"科技帖子",@"国际",@"数码",@"小说",@"军事"];
-    //,@"国风点赞列表",@"直播",@"新时代",@"北京",@"国际",@"数码",@"小说",@"军事"
+    self.titlesArray = @[@"热点1",@"科技帖子2",@"国际3",@"数码4",@"小说5",@"军事6",@"国风点赞列表7",@"直播8",@"新时代9",@"北京10",@"国际11",@"数码12",@"小说13",@"军事14"];
     [self setupView];
-    
-//    self.titleView.selectedIndex = 2;
-//    [self updateUISelectedWithIndex:2];
-}
-
-- (void)setNav {
-    self.title = @"PageViewControllerDemo";
-    [self.navigationController.navigationBar setShadowImage:[UIImage new]];   // 消除导航栏细线
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    self.navigationController.navigationBar.hidden = YES;
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
 
 - (void)dealloc {
     if (self.currentNestedDelegate) {
         [self.currentNestedDelegate.getNestedScrollView removeObserver:self forKeyPath:kObseverKeyContentOffset];
     }
+}
+
+#pragma mark - UI
+- (void)setNav {
+    self.title = @"PageViewControllerDemo";
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];   // 消除导航栏细线
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    self.navigationController.navigationBar.hidden = YES;
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
 
 - (void)setupView
@@ -103,14 +101,16 @@ static NSString *const kObseverKeyContentOffset = @"contentOffset";
     self.titleView.frame = CGRectMake(0, 0, SCREEN_WIDTH, config.titleViewHeight);
     
     CGFloat height = self.bottomContentViewConstraintH.constant = SCREEN_HEIGHT - HNWDevice.safeAreaTopInsetWhenNavigationBarShow-config.titleViewHeight;
-    self.pageContainerVC = [[HNWPageContainerViewController alloc]init];
-    self.pageContainerVC.delegate = self;
-    self.pageContainerVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, height);
+    self.pageContainerVC = [[HNWPageContainerViewController alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, height)
+                                                                        listVCs:self.listViewControllerArray
+                                                                       delegate:self];
     [self addChildViewController:self.pageContainerVC];
     [self.bottomContentView addSubview:self.pageContainerVC.view];
-    self.pageContainerVC.listVCArray = self.listViewControllerArray;
     
-    [self chooseNested:self.listViewControllerArray[0]];
+    [self chooseNestedWithIndex:0];
+    
+    self.titleView.selectedIndex = 2;
+    [self.pageContainerVC setContentWithIndex:2 animated:YES];
 }
 
 - (UILabel *)setupHeaderView {
@@ -123,13 +123,39 @@ static NSString *const kObseverKeyContentOffset = @"contentOffset";
     return headerView;
 }
 
-#pragma mark - other
-- (void)updateUISelectedWithIndex:(NSInteger)selected {
-    [self chooseNested:[self.listViewControllerArray objectAtIndex:selected]];
-    [self.pageContainerVC updateUISelectedWithIndex:selected];
+// 更新导航栏UI
+- (void)updateNavUIWithScrollView:(UIScrollView *)scrollView {
+    CGFloat offsetY = scrollView.contentOffset.y;
+    BOOL bNavHidden = NO;
+    if (offsetY > 0) {
+        CGFloat alpha = MIN(1.0, MAX(0, offsetY/(BackgroundViewBaseHeight/2.)));
+        self.navigationController.navigationBar.backgroundColor = [UIColor.whiteColor colorWithAlphaComponent:alpha];
+        if (alpha >= 0.8) {
+            bNavHidden = NO;
+        } else if (alpha <= 0.5) {
+            bNavHidden = YES;
+        }
+    } else {
+        self.navigationController.navigationBar.backgroundColor = UIColor.clearColor;
+        bNavHidden = YES;
+    }
+
+    self.navigationController.navigationBar.hidden = bNavHidden;
+    if (bNavHidden) {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    } else {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+    }
 }
 
-- (void)chooseNested:(id<NestedDelegate>)delegate{
+#pragma mark - other
+- (void)updateUISelectedWithIndex:(NSInteger)selected {
+    [self chooseNestedWithIndex:selected];
+    [self.pageContainerVC setContentWithIndex:selected animated:YES];
+}
+
+- (void)chooseNestedWithIndex:(NSInteger)index {
+    id<NestedDelegate> delegate = self.listViewControllerArray[index];
     if (self.currentNestedDelegate) {
         [self.currentNestedDelegate.getNestedScrollView removeObserver:self forKeyPath:kObseverKeyContentOffset];
     }
@@ -148,87 +174,9 @@ static NSString *const kObseverKeyContentOffset = @"contentOffset";
     NSLog(@"tapGesture");
 }
 
-#pragma mark HNWPageTitleViewDelegate, HNWPageTitleViewDataSource
-- (NSInteger)pageTitleViewNumber {
-    return self.titlesArray.count;
-}
-
-- (NSString *)pageTitleView:(HNWPageTitleView *)view pageTitleViewTitleForIndex:(NSInteger)index {
-    return self.titlesArray[index];
-}
-
-- (void)pageTitleView:(HNWPageTitleView *)view didSelectedAtIndex:(NSInteger)index {
-    [self updateUISelectedWithIndex:index];
-}
-
-- (void)pageTitleView:(HNWPageTitleView *)view didSelectedAtLastSelectedIndex:(NSInteger)lastSelectedIndex
-{
-//    self.lastSelectedIndex = lastSelectedIndex;
-}
-
-- (void)pageTitleView:(HNWPageTitleView *)pageTitleView checkSelectAtIndex:(NSInteger)index completion:(nonnull void (^)(BOOL))completion
-{
-    completion(YES);
-//    if (index == 0) {
-//        NSLog(@"无法点击");
-//        completion(NO);
-//    } else {
-//        completion(YES);
-//    }
-}
-
-#pragma mark - get data
-- (NSMutableArray *)listViewControllerArray
-{
-    if (!_listViewControllerArray) {
-        _listViewControllerArray = [NSMutableArray array];
-        for (int i = 0; i < self.titlesArray.count; i++) {
-            if (i == 0) {
-                TestAViewController *vc = [[TestAViewController alloc] init];
-                [_listViewControllerArray addObject:vc];
-            } else if (i == 1) {
-                TestBViewController *vc = [[TestBViewController alloc] init];
-                [_listViewControllerArray addObject:vc];
-            } else {
-                CommonTableViewController *vc = [[CommonTableViewController alloc] init];
-                [_listViewControllerArray addObject:vc];
-            }
-        }
-    }
-    return _listViewControllerArray;
-}
-
-- (void)updateNavUIWithScrollView:(UIScrollView *)scrollView
-{
-    CGFloat offsetY = scrollView.contentOffset.y;
-    // 更新导航栏UI
-    BOOL bNavHidden = NO;
-    if (offsetY > 0) {
-        CGFloat alpha = MIN(1.0, MAX(0, offsetY/(BackgroundViewBaseHeight/2.)));
-        
-        self.navigationController.navigationBar.backgroundColor = [UIColor.whiteColor colorWithAlphaComponent:alpha];
-        if (alpha >= 0.8) {
-            bNavHidden = NO;
-        } else if (alpha <= 0.5) {
-            bNavHidden = YES;
-        }
-    } else {
-        self.navigationController.navigationBar.backgroundColor = UIColor.clearColor;
-
-        bNavHidden = YES;
-    }
-
-    self.navigationController.navigationBar.hidden = bNavHidden;
-    if (bNavHidden) {
-        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    } else {
-        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-    }
-}
-
 #pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
     [self updateNavUIWithScrollView:self.mainScrollView];
 
     //最大上滑距离
@@ -266,10 +214,57 @@ static NSString *const kObseverKeyContentOffset = @"contentOffset";
 }
 
 #pragma mark - HNWPageContainerViewControllerDelegate
-- (void)pageContainerViewController:(HNWPageContainerViewController *)vc didScrolleddAtIndex:(NSInteger)index
-{
+- (void)pageContainerViewController:(HNWPageContainerViewController *)vc didScrolledAtIndex:(NSInteger)index {
     self.titleView.selectedIndex = index;
-    [self chooseNested:self.listViewControllerArray[index]];
+    [self chooseNestedWithIndex:index];
+}
+#pragma mark HNWPageTitleViewDelegate, HNWPageTitleViewDataSource
+- (NSInteger)pageTitleViewNumber {
+    return self.titlesArray.count;
+}
+
+- (NSString *)pageTitleView:(HNWPageTitleView *)view pageTitleViewTitleForIndex:(NSInteger)index {
+    return self.titlesArray[index];
+}
+
+- (void)pageTitleView:(HNWPageTitleView *)view didSelectedAtIndex:(NSInteger)index {
+    [self updateUISelectedWithIndex:index];
+}
+
+//- (void)pageTitleView:(HNWPageTitleView *)view didSelectedAtLastSelectedIndex:(NSInteger)lastSelectedIndex
+//{
+////    self.lastSelectedIndex = lastSelectedIndex;
+//}
+//
+//- (void)pageTitleView:(HNWPageTitleView *)pageTitleView checkSelectAtIndex:(NSInteger)index completion:(nonnull void (^)(BOOL))completion
+//{
+//    completion(YES);
+////    if (index == 0) {
+////        NSLog(@"无法点击");
+////        completion(NO);
+////    } else {
+////        completion(YES);
+////    }
+//}
+
+#pragma mark - get data
+- (NSMutableArray *)listViewControllerArray {
+    if (!_listViewControllerArray) {
+        _listViewControllerArray = [NSMutableArray array];
+        for (int i = 0; i < self.titlesArray.count; i++) {
+            if (i == 0) {
+                TestAViewController *vc = [[TestAViewController alloc] init];
+                [_listViewControllerArray addObject:vc];
+            } else if (i == 1) {
+                TestBViewController *vc = [[TestBViewController alloc] init];
+                [_listViewControllerArray addObject:vc];
+            } else {
+                CommonTableViewController *vc = [[CommonTableViewController alloc] init];
+                [_listViewControllerArray addObject:vc];
+            }
+        }
+    }
+    return _listViewControllerArray;
 }
 
 @end

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A6039594261C2E9800A50030 /* HNWDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = A6039593261C2E9800A50030 /* HNWDevice.m */; };
-		A68321292625457400205911 /* HNWPageContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A68321282625457400205911 /* HNWPageContainerViewController.m */; };
+		A683212E262569B100205911 /* HNWPageContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A683212C262569B100205911 /* HNWPageContainerViewController.m */; };
 		A6D26D4D260884B700D85223 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A6D26D4C260884B700D85223 /* AppDelegate.m */; };
 		A6D26D53260884B700D85223 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6D26D52260884B700D85223 /* ViewController.m */; };
 		A6D26D56260884B700D85223 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6D26D54260884B700D85223 /* Main.storyboard */; };
@@ -28,8 +28,8 @@
 /* Begin PBXFileReference section */
 		A6039592261C2E9800A50030 /* HNWDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNWDevice.h; sourceTree = "<group>"; };
 		A6039593261C2E9800A50030 /* HNWDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNWDevice.m; sourceTree = "<group>"; };
-		A68321272625457400205911 /* HNWPageContainerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HNWPageContainerViewController.h; sourceTree = "<group>"; };
-		A68321282625457400205911 /* HNWPageContainerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HNWPageContainerViewController.m; sourceTree = "<group>"; };
+		A683212B262569B100205911 /* HNWPageContainerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HNWPageContainerViewController.h; sourceTree = "<group>"; };
+		A683212C262569B100205911 /* HNWPageContainerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HNWPageContainerViewController.m; sourceTree = "<group>"; };
 		A6A2B9AD261E9CD500614485 /* NestedDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NestedDelegate.h; sourceTree = "<group>"; };
 		A6D26D48260884B700D85223 /* PageViewControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PageViewControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6D26D4B260884B700D85223 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -129,8 +129,8 @@
 				A6D26D68260884E300D85223 /* HNWPageViewTitleConfig.m */,
 				A6D26D6A260884E300D85223 /* HNWPageTitleCell.h */,
 				A6D26D6E260884E300D85223 /* HNWPageTitleCell.m */,
-				A68321272625457400205911 /* HNWPageContainerViewController.h */,
-				A68321282625457400205911 /* HNWPageContainerViewController.m */,
+				A683212B262569B100205911 /* HNWPageContainerViewController.h */,
+				A683212C262569B100205911 /* HNWPageContainerViewController.m */,
 			);
 			path = HNWPageTitle;
 			sourceTree = "<group>";
@@ -210,7 +210,7 @@
 				A6D26D73260884E300D85223 /* HNWPageTitleView.m in Sources */,
 				A6D26D53260884B700D85223 /* ViewController.m in Sources */,
 				A6039594261C2E9800A50030 /* HNWDevice.m in Sources */,
-				A68321292625457400205911 /* HNWPageContainerViewController.m in Sources */,
+				A683212E262569B100205911 /* HNWPageContainerViewController.m in Sources */,
 				A6D26D4D260884B700D85223 /* AppDelegate.m in Sources */,
 				A6D26D92260996F400D85223 /* TestAViewController.m in Sources */,
 				A6D26D982609970500D85223 /* TestBViewController.m in Sources */,
