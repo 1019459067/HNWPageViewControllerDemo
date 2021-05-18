@@ -49,6 +49,7 @@
 - (instancetype)initWithConfig:(HNWPageViewTitleConfig *)config {
     if (self = [super init]) {
         [self initTitleViewWithConfig:config];
+        self.backgroundColor = config.titleViewBackgroundColor;
     }
     return self;
 }
@@ -66,7 +67,7 @@
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    self.collectionView.backgroundColor = config.titleViewBackgroundColor;
+    self.collectionView.backgroundColor = UIColor.clearColor;
     [self.collectionView registerClass:[HNWPageTitleCell class] forCellWithReuseIdentifier:@"HNWPageTitleCell"];
     self.collectionView.showsHorizontalScrollIndicator = NO;
     [self addSubview:self.collectionView];
